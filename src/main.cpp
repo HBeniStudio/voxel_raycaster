@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <filesystem>
 #include <iostream>
-#include "Version.hpp"
+#include "main.hpp"
 
 int main(){
     return 0;
