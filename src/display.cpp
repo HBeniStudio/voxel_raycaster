@@ -1,9 +1,14 @@
 #include "main.hpp"
 
-void display::destroy(){
-
+display::display(unsigned int width, unsigned int height)
+    : window(sf::VideoMode(width, height), "My window")
+{
 }
 
-display::display(unsigned int height, unsigned int width){
-    sf::Window window(sf::VideoMode({height, width}), "My window");
+void display::destroy() {
+    window.close();
+}
+
+bool display::isopen() {
+    return window.isOpen();
 }

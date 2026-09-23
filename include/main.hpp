@@ -1,10 +1,13 @@
 #pragma once
-#include "string"
+#include <string>
 #include <SFML/Graphics.hpp>
 
-class display{
-    public:
-        void destroy();
+class display {
+public:
+    display(unsigned int width, unsigned int height);
+    void destroy();
+    bool isopen();
 
-    display(unsigned int height, unsigned int width);
+private:
+    sf::RenderWindow window;
 };
