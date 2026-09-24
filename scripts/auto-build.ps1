@@ -5,6 +5,38 @@ $buildDir = Join-Path $root 'build'
 $lastTrigger = [datetime]::MinValue
 $buildLock = $false
 
+function Initialize-VisualStudioEnvironment {
+    $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
+    if (-not (Test-Path $vswhere)) {
+        $vswhere = 'C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe'
+    }
+
+    if (-not (Test-Path $vswhere)) {
+        return
+    }
+
+    $vsInstallPath = & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+    if (-not $vsInstallPath) {
+        return
+    }
+
+    $vcvars = Join-Path $vsInstallPath 'VC\Auxiliary\Build\vcvars64.bat'
+    if (-not (Test-Path $vcvars)) {
+        return
+    }
+
+    $envOutput = & cmd /c "call `"$vcvars`" x64 >NUL && set"
+    foreach ($line in $envOutput) {
+        if ($line -match '^([^=]+)=(.*)$') {
+            $name = $matches[1]
+            $value = $matches[2]
+            Set-Item -Path "Env:$name" -Value $value
+        }
+    }
+}
+
+Initialize-VisualStudioEnvironment
+
 function Invoke-ProjectBuild {
     param(
         [string]$TriggerPath
@@ -23,8 +55,12 @@ function Invoke-ProjectBuild {
     $script:buildLock = $true
 
     try {
+        if (Test-Path $buildDir) {
+            Remove-Item -Recurse -Force $buildDir
+        }
+
         Write-Host "Build triggered by: $TriggerPath"
-        cmake -S $root -B $buildDir -DCMAKE_BUILD_TYPE=Debug
+        cmake -S $root -B $buildDir -G "Visual Studio 18 2026" -DCMAKE_BUILD_TYPE=Debug
         cmake --build $buildDir --config Debug
         Write-Host 'Build finished successfully.'
     }

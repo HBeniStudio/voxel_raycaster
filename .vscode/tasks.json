@@ -10,10 +10,19 @@
         "${workspaceFolder}",
         "-B",
         "${workspaceFolder}/build",
+        "-G",
+        "Visual Studio 18 2026",
         "-DCMAKE_BUILD_TYPE=Debug"
       ],
       "options": {
-        "cwd": "${workspaceFolder}"
+        "cwd": "${workspaceFolder}",
+        "shell": {
+          "executable": "cmd.exe",
+          "args": [
+            "/d",
+            "/c"
+          ]
+        }
       },
       "problemMatcher": []
     },
@@ -28,7 +37,14 @@
         "Debug"
       ],
       "options": {
-        "cwd": "${workspaceFolder}"
+        "cwd": "${workspaceFolder}",
+        "shell": {
+          "executable": "cmd.exe",
+          "args": [
+            "/d",
+            "/c"
+          ]
+        }
       },
       "dependsOn": [
         "CMake: Configure (Debug)"
