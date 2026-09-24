@@ -5,8 +5,10 @@
 class display {
 public:
     display(unsigned int width, unsigned int height);
-    void destroy();
-    bool isopen();
+    bool isopen() const;
+    bool eventhandler();
+    void clear(const sf::Color& color = sf::Color::Black);
+    void render();
 
 private:
     sf::RenderWindow window;
