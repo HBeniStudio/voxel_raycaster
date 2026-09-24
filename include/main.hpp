@@ -14,10 +14,16 @@ public:
     void colorpixel(int x, int y, const sf::Color& color);
     void draw();
     void fillpixel(unsigned int x, unsigned int y);
+    void game_draw(std::vector<float> p, int width, int height);
+    float getheight(sf::Image& map, int x, int y);
+    sf::Color getcolor(sf::Image& map, int x, int y);
 
 private:
     sf::RenderWindow window;
     std::vector<sf::Color> pixel;
     unsigned int width;
     unsigned int height;
+
+    sf::Image heightmap;
+    sf::Image colormap;
 };
